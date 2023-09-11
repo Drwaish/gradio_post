@@ -62,83 +62,70 @@ def sentence_builder(method, link ,*rows):
     for i in range(len(key)):
             print(i)
             payload[key[i]] = value[i]
-    # headers = headers
+            if type1[i] != "str":
+              payload[key[i]] = eval(value[i])
+
+    if headers != '':
+       headers = eval(headers)
+    else:
+       headers = None
     if method == 'POST':
-        # payload = {}
-        # for i in range(len(key))
-        #     payload [key[i]] = value[i].eval()
-                 
-        headers = {
-
-                    # replace your header here
-
-                  }
-        result = requests.post(link, data = payload, headers = headers)
+        result = requests.post(link, json = payload, headers = headers)
         return result.json()
     elif method == 'GET':
-      headers = {                   
-          
-           # replace your header here
-
-                }
       result = requests.get(link, headers = headers)
       return result.json()
     elif method == "DEL": 
         result = requests.delete(link, data = payload)
         return result.json()
-    
-    # uncoment for usage
-     
     # elif method == "UPDATE":
     #     result = requests.put(link, data = payload, headers = headers)
     #     return result.json()
 
 
 
-        
-
-
-
-    # return ({"method" : method,
-    #          "URL" : link,
-    #          "Key(s)" : key,
-    #          "Value(s)" : value,
-    #          "type" : type1})
 with gr.Blocks(theme = gr.themes.Monochrome()) as demo:
+    gr.Markdown(
+      """
+      <h1><center><b> API TESTING </b></center><h1>
+      <h3><center><b> Dynamically Increase or Decrease Parameters </b></center><h3>
+      """)
+   
+  
     with gr.Row():
         drop = gr.Dropdown(["GET", "POST", "DEL", "UPDATE"], label="Methods", scale = 1  )
-        text = gr.Textbox(label="Add Link Here", scale = 2)
+        text = gr.Textbox("", label="Add Link Here", scale = 2)
 
     with gr.Row(visible = False) as ky[0]:
-        param1 = gr.Textbox("source_language",label = "Key", scale =1)
-        param2 = gr.Textbox("en", label = "Value", scale =1)
-        param3 = gr.Textbox("str",label = "Type", scale =1)
+        param1 = gr.Textbox(label = "Key", scale =1,lines = 4)
+        param2 = gr.Textbox(label = "Value", scale =1,lines = 4)
+        param3 = gr.Textbox(label = "Type", scale =1,lines = 4)
 
     with gr.Row(visible = False) as ky[1]:
-        param4 = gr.Textbox("target_language",label = "Key", scale =1)
-        param5 = gr.Textbox("id", label = "Value", scale =1)
-        param6 = gr.Textbox("str", label = "Type", scale =1)
+        param4 = gr.Textbox(label = "Key", scale =1)
+        param5 = gr.Textbox( label = "Value", scale =1,lines = 4)
+        param6 = gr.Textbox( label = "Type", scale =1,lines = 4)
 
     with gr.Row(visible = False) as ky[2]:
-        param7 = gr.Textbox("text", label = "Key", scale =1)
-        param8 = gr.Textbox("What is your name?",label = "Value", scale =1)
-        param9 = gr.Textbox("str", label = "Type", scale =1)
+        param7 = gr.Textbox(label = "Key", scale =1,lines = 4)
+        param8 = gr.Textbox(label = "Value", scale =1,lines = 4)
+        param9 = gr.Textbox( label = "Type", scale =1,lines = 4)
 
     with gr.Row(visible = False) as ky[3]:
-        parama = gr.Textbox(label = "Key", scale =1)
-        paramb = gr.Textbox(label = "Value", scale =1)
-        paramc = gr.Textbox(label = "Type", scale =1)
+        parama = gr.Textbox(label = "Key", scale =1,lines = 4)
+        paramb = gr.Textbox( label = "Value", scale =1,lines = 4)
+        paramc = gr.Textbox(label = "Type", scale =1,lines = 4)
     with gr.Row(visible = False) as ky[4]:
-        paramd = gr.Textbox(label = "Key", scale =1)
-        parame = gr.Textbox(label = "Value", scale =1)
-        paramf = gr.Textbox(label = "Type", scale =1)
+        paramd = gr.Textbox(label = "Key", scale =1,lines = 4)
+        parame = gr.Textbox(label = "Value", scale =1,lines = 4)
+        paramf = gr.Textbox(label = "Type", scale =1,lines = 4)
     with gr.Row(visible = False) as ky[5]:
-        paramg = gr.Textbox(label = "Key", scale =1)
-        paramh = gr.Textbox(label = "Value", scale =1)
-        parami = gr.Textbox(label = "Type", scale =1)
+        paramg = gr.Textbox(label = "Key", scale =1,lines = 4)
+        paramh = gr.Textbox(label = "Value", scale =1, lines = 4)
+        parami = gr.Textbox(label = "Type", scale =1,lines = 4)
 
 
-    # headers = gr.Textbox(label = "Add header here")
+    headers = gr.TextArea(label = "Add header here")
     
     s = gr.Slider(1, max_textboxes, value=max_textboxes, step=1, label="How many Parameters want to enter:")
     
@@ -147,14 +134,15 @@ with gr.Blocks(theme = gr.themes.Monochrome()) as demo:
     for i in range(max_textboxes):
         rows.append(ky[i])
 
-    length = 0
     s.change(variable_outputs, s, rows)
     out = gr.Json(
         label= "Response"
     )
+
     btn6 = gr.Button("Click Me",  visible = True) 
-    btn6.click(sentence_builder, inputs = [drop, text, param1, param2, param3,param4, param5, param6, param7, param8, param9,
+    btn6.click(sentence_builder, inputs = [drop, text, headers, param1, param2, param3,param4, param5, param6, param7, param8, param9,
                                            parama, paramb, paramc,paramd, parame, paramf, paramg, paramh, parami], outputs = out)
+
 
 
 if __name__ == "__main__":
