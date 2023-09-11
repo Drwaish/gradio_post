@@ -1,0 +1,3 @@
+Response,flag,username,timestamp
+"GET  and http://google.com and parameters are key, str and str",,,2023-09-07 13:13:49.873941
+"POST  and http://google.com and parameters are key, str and str",,,2023-09-07 13:13:49.878494
